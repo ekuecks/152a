@@ -51,87 +51,28 @@ module driver(
 	wire [97:0] grid;
 	wire player;
 
-   reg [1:0]   arst_ff;
-   wire        rst;
-   wire        arst_i;
-
-   assign arst_i = btnT;
-   assign rst = arst_ff[0];
-	
-	always @ (posedge clk or posedge arst_i)
-   begin
-	  if (arst_i)
-       arst_ff <= 2'b11;
-     else
-	  begin
-	    arst_ff <= {1'b0, arst_ff[1]};
-	  end
-   end
-
-	
-	reg [5:0]   aleft_ff;
-   wire        left;
-   wire        aleft_i;
-
-   assign aleft_i = btnL;
-   assign left = &aleft_ff;
-	
-	always @ (posedge clk or posedge aleft_i)
-   begin
-	  if (aleft_i)
-	  begin
-	    if(~left)
-		 begin
-         aleft_ff <= (aleft_ff + 1) % 64;
-		 end
-	  end
-     else
-	  begin
-	    aleft_ff <= 0;
-	  end
-   end	
-	
-	reg [5:0]   aright_ff;
-   wire        right;
-   wire        aright_i;
-
-   assign aright_i = btnR;
-   assign right = aright_ff[0];
-	
-	always @ (posedge clk or posedge aright_i)
-   begin
-	  if (aright_i)
-       aright_ff <= 6'b111111;
-     else
-	  begin
-	    aright_ff <= {1'b0, aright_ff[5:1]};
-	  end
-   end
-
-	
-	reg [5:0]   amiddle_ff;
-   wire        middle;
-   wire        amiddle_i;
-
-   assign amiddle_i = btnM;
-   assign middle = amiddle_ff[0];
-	
-	always @ (posedge clk or posedge amiddle_i)
-   begin
-	  if (amiddle_i)
-       amiddle_ff <= 6'b111111;
-     else
-	  begin
-	    amiddle_ff <= {1'b0, amiddle_ff[5:1]};
-	  end
-   end
+   
 	
 
    clock_divider clock_divider_(
 	  // output
 	  .display_clk (display_clk),
+	  .debounce_clk (debounce_clk),
 	  // input
 	  .clk (clk)
+	);
+	
+	debounce debounce_(
+	  .left (left),
+	  .right (right),
+	  .middle (middle),
+	  .rst (rst),
+	  //.clk (clk),
+	  .debounce_clk (debounce_clk),
+	  .btnL (btnL),
+	  .btnR (btnR),
+	  .btnM (btnM),
+	  .btnT (btnT)
 	);
 	
 	select select_(
