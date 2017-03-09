@@ -22,40 +22,35 @@ module select(
 	  // output
 	  grid,
 	  player,
+	  location,
 	  // input
 	  left,
 	  right,
 	  middle,
-	  clk
+	  clk,
+	  rst
 	);
 wire clk;
+wire rst;
 wire left;
 wire right;
 wire [97:0] grid;
 wire player;
-
-//reg [10:0] gone_left_ff;
-//reg [10:0] gone_right_ff;
-//reg [10:0] dropped_ff;
-
-//wire gone_left;
-//wire gone_right;
-//wire dropped;
+wire [6:0] location;
+reg [6:0] location_r;
+assign location = location_r;
 
 reg gone_left;
 reg gone_right;
 reg dropped;
 
-//assign gone_left = gone_left_ff[0];
-//assign gone_right = gone_right_ff[0];
-//assign dropped = dropped_ff[0];
-
 input clk;
+input rst;
 input left;
 input right;
 input middle;
 
-
+output location;
 output grid;
 output player;
 
@@ -71,30 +66,37 @@ reg [20:0] column_counts;
 initial
 begin
   grid_r[95:0] = 0;
-  grid_r[97:96] = 1;
+  grid_r[97:96] = 2'b01;
   player_r = 0;
   selected = 0;
   column_counts = 0;
+  location_r = 0;
 end
 
 always @ (posedge clk)
 begin
-  if (grid_r[97:84] == 0)
+  if(rst)
+  begin
+    grid_r[97:96] = 2'b01;
+	 grid_r[95:0] = 0;
+	 player_r = 0;
+	 selected = 0;
+	 column_counts = 0;
+	 location_r = 1;
+  end
+  else if (grid_r[97:84] == 0)
   begin
     grid_r[97:96] = 2'b01;
 	 player_r = 0;
 	 selected = 0;
 	 column_counts = 0;
+	 location_r = 1;
   end
   // left
   else if (left)
   begin
     gone_right = 0;
-    //gone_right_ff = 0;
-    //gone_right_ff = {1'b0, gone_right_ff[10:1]};
 	 dropped = 0;
-	 //dropped_ff = 0;
-	 //dropped_ff = {1'b0, dropped_ff[10:1]};
     if (selected != 0  && ~gone_left)
 	 begin
 	   grid_r[(97-(selected)*2)-:2] = 0; 
@@ -102,17 +104,12 @@ begin
 		grid_r[(97-(selected)*2)-:2] = player + 1;
 	 end
 	 gone_left = 1;
-	 //gone_left_ff = 11'b11111111111;
   end
   // right
   else if (right)
   begin
     gone_left = 0;
-    //gone_left_ff = 0;
-    //gone_left_ff = {1'b0, gone_left_ff[10:1]};
 	 dropped = 0;
-	 //dropped_ff = 0;
-	 //dropped_ff = {1'b0, dropped_ff[10:1]};
     if (selected != 6 && ~gone_right)
 	 begin
 	   grid_r[(97-(selected)*2)-:2] = 0; 
@@ -120,21 +117,17 @@ begin
 		grid_r[(97-(selected)*2)-:2] = player + 1;
 	 end
 	 gone_right = 1;
-	 //gone_right_ff = 11'b11111111111;
   end
   // drop
   else if (middle)
   begin
     gone_left = 0;
-    //gone_left_ff = 0;
-    //gone_left_ff = {1'b0, gone_left_ff[10:1]};
 	 gone_right = 0;
-	 //gone_right_ff = 0;
-	 //gone_right_ff = {1'b0, gone_right_ff[10:1]};
 	 if(~dropped)
 	 begin
 	   if(column_counts[selected*3 + 2-:3] < 6)
 		begin
+		  location_r = (13 - selected*2 + column_counts[selected*3 + 2-:3] * 14) % 128;
 		  grid_r[13 - selected*2 + column_counts[selected*3 + 2-:3] * 14-:2] = player_r + 1;
 		  column_counts[selected*3 + 2-:3] = (column_counts[selected*3 + 2-:3] + 1)%8;
 		  player_r = ~player_r;
@@ -144,19 +137,12 @@ begin
 		end
 	 end
 	 dropped = 1;
-	 //dropped_ff = 11'b11111111111;
   end
   else
   begin
     gone_left = 0;
 	 gone_right = 0;
 	 dropped = 0;
-    //gone_left_ff = 0;
-    //gone_left_ff = {1'b0, gone_left_ff[10:1]};
-	 //gone_right_ff = 0;
-	 //gone_right_ff = {1'b0, gone_right_ff[10:1]};
-	 //dropped_ff = 0;
-	 //dropped_ff = {1'b0, dropped_ff[10:1]};
 	 grid_r = grid_r;
   end
 end

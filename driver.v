@@ -50,9 +50,9 @@ module driver(
 	
 	wire [97:0] grid;
 	wire player;
+	wire [6:0] location;
+	wire winner;
 
-   
-	
 
    clock_divider clock_divider_(
 	  // output
@@ -79,11 +79,13 @@ module driver(
 	  // output
 	  .grid (grid),
 	  .player (player),
+	  .location (location),
 	  // input
 	  .left (left),
 	  .right (right),
 	  .middle (middle),
-	  .clk  (clk)
+	  .clk  (clk),
+	  .rst  (rst)
 	);
 
    display display_(
@@ -96,6 +98,16 @@ module driver(
 	  // input
 	  .clk (clk),
 	  .display_clk (display_clk),
-	  .grid (grid)
+	  .grid (grid),
+	  .winner (winner)
+	);
+	
+	terminate terminate_(
+	  // output
+	  .winner (winner),
+	  // input
+	  .clk (clk),
+	  .grid (grid),
+	  .location (location)
 	);
 endmodule
