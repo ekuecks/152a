@@ -121,7 +121,7 @@ module display(
 	
 	always @ (*)
 	begin
-	  if(term)
+/*	  if(term)
 	  begin
 	    if((rows < vbp || rows >= vfp) || (columns < hbp || columns >= hfp))
 		 begin
@@ -149,7 +149,7 @@ module display(
 		 end
 	  end
 	  else
-	  begin
+	  begin*/
 	  if(rows >= vbp && rows < vfp)
 	  begin
 	    if (rows < vbp + h || (rows > vbp + h + side && rows < vbp + h + side + h))
@@ -258,6 +258,6 @@ module display(
 		 vgaGreen <= 0;
 		 vgaBlue <= 0;
 	  end
-	  end
+//	  end
    end
 endmodule

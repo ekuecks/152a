@@ -800,11 +800,11 @@ always @ (posedge clk)
 	 begin
 	   if (ai % 14 > 7)
 		begin
-		  score_r = (10 * aithrees - 10 * opponentthrees + 14 - (ai % 14))% 512;
+		  score_r = (200 + 10 * aithrees - 10 * opponentthrees + 14 - (ai % 14))% 512;
 		end
 		else
 	   begin
-		  score_r = (10 * aithrees - 10 * opponentthrees + ai % 14) % 512;
+		  score_r = (200 + 10 * aithrees - 10 * opponentthrees + ai % 14) % 512;
 		end   
 	 end
   end
