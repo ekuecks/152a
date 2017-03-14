@@ -22,7 +22,7 @@ module display(
     // output
     vgaRed, vgaGreen, vgaBlue, Hsync, Vsync,
 	 // input
-	 clk, display_clk, grid, winner
+	 clk, display_clk, grid, winner, term
     );
 	output vgaRed;
 	output vgaGreen;
@@ -34,6 +34,7 @@ module display(
 	input display_clk;
 	input grid;
 	input winner;
+	input term;
 	
    reg [2:0] vgaRed;
 	reg [2:0] vgaGreen;
@@ -49,7 +50,8 @@ module display(
 	wire clk;
 	wire display_clk;
 	wire [97:0] grid;
-	wire winner;
+	wire [1:0] winner;
+	wire term;
 	
 	parameter hpixels = 800;// horizontal pixels per line
    parameter vlines = 521; // vertical lines per frame
@@ -119,11 +121,32 @@ module display(
 	
 	always @ (*)
 	begin
-	  if(winner)
+	  if(term)
 	  begin
-	    vgaRed <= 0;
-		 vgaGreen <= 0;
-		 vgaBlue <= 0;
+	    if((rows < vbp || rows >= vfp) || (columns < hbp || columns >= hfp))
+		 begin
+		   vgaRed <= 0;
+			vgaGreen <= 0;
+			vgaBlue <= 0;
+		 end
+	    else if(winner[0])
+		 begin
+	      vgaRed <= 0;
+		   vgaGreen <= 3'b111;
+		   vgaBlue <= 0;
+		 end
+		 else if(winner[1])
+		 begin
+	      vgaRed <= 3'b111;
+		   vgaGreen <= 0;
+		   vgaBlue <= 0;
+		 end
+		 else
+		 begin
+		   vgaRed <= 0;
+			vgaGreen <= 0;
+			vgaBlue <= 0;
+		 end
 	  end
 	  else
 	  begin

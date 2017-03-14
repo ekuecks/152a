@@ -21,13 +21,18 @@
 module select(
 	  // output
 	  grid,
-	  player,
 	  location,
+	  column_counts,
+	  player,
 	  // input
+	  term,
 	  left,
 	  right,
 	  middle,
 	  clk,
+	  sw,
+	  move,
+	  ai,
 	  rst
 	);
 wire clk;
@@ -39,6 +44,10 @@ wire player;
 wire [6:0] location;
 reg [6:0] location_r;
 assign location = location_r;
+wire term;
+wire sw;
+wire move;
+wire [6:0] ai;
 
 reg gone_left;
 reg gone_right;
@@ -49,10 +58,15 @@ input rst;
 input left;
 input right;
 input middle;
+input term;
+input sw;
+input move;
+input ai;
 
 output location;
 output grid;
 output player;
+output column_counts;
 
 reg [97:0] grid_r = 0;
 assign grid = grid_r;
@@ -70,7 +84,7 @@ begin
   player_r = 0;
   selected = 0;
   column_counts = 0;
-  location_r = 0;
+  location_r = 1;
 end
 
 always @ (posedge clk)
@@ -119,7 +133,7 @@ begin
 	 gone_right = 1;
   end
   // drop
-  else if (middle)
+  else if (middle && !term  && !(sw && player))
   begin
     gone_left = 0;
 	 gone_right = 0;
@@ -137,6 +151,15 @@ begin
 		end
 	 end
 	 dropped = 1;
+  end
+  else if (sw && player && move)
+  begin
+    grid_r[ai-:2] = 2'b01;
+	 player_r = 0;
+	 column_counts[(6 - (ai + 1) % 14)*3-:3] = (column_counts[(6 - (ai + 1) % 14)*3-:3] + 1)%8;
+    selected = 0;
+	 grid_r[95:84] = 0;
+	 grid_r[97:96] = 2'b01;
   end
   else
   begin

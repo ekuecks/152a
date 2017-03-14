@@ -19,17 +19,19 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module terminate(
-    winner,
+    term, winner,
 	 clk, grid, location
     );
   input clk;
   input grid;
   input location;
   output winner;
+  output term;
   
   wire clk;
   wire [97:0] grid;
-  wire winner;
+  wire [1:0] winner;
+  wire term;
   wire [6:0] location;
   reg vert;
   
@@ -45,7 +47,8 @@ module terminate(
   reg [3:0] diagdown_r;
   assign diagdown = |diagdown_r;
   
-  assign winner = vert | horiz | diagup | diagdown;
+  assign term = vert | horiz | diagup | diagdown;
+  assign winner = grid[location-:2];
 
   always @ (posedge clk)
   begin
@@ -103,6 +106,10 @@ module terminate(
 		horiz_r[2:0] = 0;
 		horiz_r[3] = (grid[location] & grid[location + 6] & grid[location + 4] & grid[location + 2]) | (grid[location - 1] & grid[location + 5] & grid[location + 3] & grid[location + 1]);
     end
+	 else
+	 begin
+	   horiz_r = 0;
+	 end
 
     // diagonal up (left to right)
 	 // last
@@ -174,7 +181,11 @@ module terminate(
       diagup_r[2] = 0;
       diagup_r[3] = 0;    
 	 end
-	 
+	 else
+	 begin
+	   diagup_r = 0;
+	 end
+
 	 // diagonal down (left to right)
 	 // last
 	 if(location == 7 || location == 5 || location == 3 || location == 1 || location == 15 || location == 29)
@@ -244,6 +255,10 @@ module terminate(
       diagdown_r[1] = (grid[location] & grid[location + 16] & grid[location + 32] & grid[location - 16]) | (grid[location - 1] & grid[location + 15] & grid[location + 31] & grid[location - 17]);
       diagdown_r[2] = 0;
       diagdown_r[3] = 0;    
+	 end
+	 else
+	 begin
+	   diagdown_r = 0;
 	 end
   end
 endmodule

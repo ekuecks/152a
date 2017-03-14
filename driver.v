@@ -22,7 +22,7 @@ module driver(
     // output
     vgaRed, vgaGreen, vgaBlue, Hsync, Vsync,
 	 // input
-	 clk, btnR, btnL, btnM, btnT
+	 clk, btnR, btnL, btnM, btnT, sw
     );
 	output vgaRed;
 	output vgaGreen;
@@ -35,6 +35,7 @@ module driver(
 	input btnL;
 	input btnM;
 	input btnT;
+	input sw;
 	
    wire [2:0] vgaRed;
 	wire [2:0] vgaGreen;
@@ -42,6 +43,7 @@ module driver(
 	wire Hsync;
 	wire Vsync;
 	wire clk;
+	wire game_clk;
 	wire display_clk;
 	wire btnR;
 	wire btnL;
@@ -49,15 +51,20 @@ module driver(
 	wire btnT;
 	
 	wire [97:0] grid;
-	wire player;
 	wire [6:0] location;
-	wire winner;
+	wire [1:0] winner;
+	wire term;
+	wire sw;
+	wire [20:0] column_counts;
+	wire [6:0] opt;
+	wire move;
 
 
    clock_divider clock_divider_(
 	  // output
 	  .display_clk (display_clk),
 	  .debounce_clk (debounce_clk),
+	  .game_clk (game_clk),
 	  // input
 	  .clk (clk)
 	);
@@ -78,13 +85,18 @@ module driver(
 	select select_(
 	  // output
 	  .grid (grid),
-	  .player (player),
 	  .location (location),
+	  .column_counts (column_counts),
+	  .player (player),
 	  // input
+	  .term (term),
 	  .left (left),
 	  .right (right),
 	  .middle (middle),
-	  .clk  (clk),
+	  .clk (game_clk),
+	  .sw (sw),
+	  .ai (opt),
+	  .move (move),
 	  .rst  (rst)
 	);
 
@@ -96,18 +108,26 @@ module driver(
 	  .Hsync (Hsync),
 	  .Vsync (Vsync),
 	  // input
-	  .clk (clk),
+	  .clk (game_clk),
 	  .display_clk (display_clk),
 	  .grid (grid),
-	  .winner (winner)
+	  .winner (winner),
+	  .term (term)
 	);
 	
 	terminate terminate_(
 	  // output
 	  .winner (winner),
+	  .term (term),
 	  // input
-	  .clk (clk),
+	  .clk (game_clk),
 	  .grid (grid),
 	  .location (location)
 	);
+	
+	minimax minimax_(
+	.opt (opt), .move (move),
+	.grid (grid), .column_counts (column_counts), .player (player), .sw (sw), .clk (game_clk)
+	);
+	
 endmodule

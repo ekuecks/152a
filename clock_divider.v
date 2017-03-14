@@ -19,16 +19,19 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module clock_divider(
-    display_clk, debounce_clk,
+    display_clk, debounce_clk, game_clk,
 	 clk
     );
   input clk;
   output display_clk;
   output debounce_clk;
+  output game_clk;
   
   wire clk;
   wire display_clk;
   wire debounce_clk;
+  wire game_clk;
+  assign game_clk = display_clk;
   
   reg [1:0] display_counter;
   wire [2:0] display_counter_inc;
