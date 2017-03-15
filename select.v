@@ -52,6 +52,7 @@ wire [6:0] ai;
 reg gone_left;
 reg gone_right;
 reg dropped;
+reg aidropped;
 
 input clk;
 input rst;
@@ -148,18 +149,23 @@ begin
 		  grid_r[(97-selected*2)-:2] = 0;
 		  grid_r[97:96] = player_r + 1;
 	     selected = 0;
+		  aidropped = 0;
 		end
 	 end
 	 dropped = 1;
   end
-  else if (sw && player && move)
+  else if (sw && player && move && !term)
   begin
-    grid_r[ai-:2] = 2'b01;
-	 player_r = 0;
-	 column_counts[(6 - (ai + 1) % 14)*3-:3] = (column_counts[(6 - (ai + 1) % 14)*3-:3] + 1)%8;
-    selected = 0;
-	 grid_r[95:84] = 0;
-	 grid_r[97:96] = 2'b01;
+    if(~aidropped)
+	 begin
+      grid_r[ai-:2] = 2'b10;
+	   player_r = 0;
+	   column_counts[(6 - (ai + 1) % 14)*3-:3] = (column_counts[(6 - (ai + 1) % 14)*3-:3] + 1)%8;
+      selected = 0;
+	   grid_r[95:84] = 0;
+	   grid_r[97:96] = 2'b01;
+	 end
+	 aidropped = 1;
   end
   else
   begin

@@ -11,6 +11,7 @@ module tb;
 	wire [1:0] vgaBlue; 
 	wire Hsync;
 	wire Vsync;
+	wire sw = 1;
 
    // End of automatics
 
@@ -141,7 +142,7 @@ module tb;
    
    driver driver0_ (// Outputs
                             vgaRed, vgaGreen, vgaBlue, Hsync, Vsync,
-									 clk, btnR, btnL, btnM, btnT
+									 clk, btnR, btnL, btnM, btnT, sw
                             /*AUTOINST*/);
 endmodule // tb
 // Local Variables:

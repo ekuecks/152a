@@ -68,9 +68,14 @@ begin
     count = 0;
 	 move_r = 0;
   end
-  else if (count >= 105)
+  else if (count == 105)
   begin
     move_r = 1;
+	 count = (count + 1) % 128;
+  end
+  else if (count > 105)
+  begin
+    move_r = 0;
   end
   else if (count % 15 == 0)
   begin
