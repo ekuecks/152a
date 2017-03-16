@@ -86,8 +86,6 @@ module driver(
 	  // output
 	  .grid (grid),
 	  .location (location),
-	  .column_counts (column_counts),
-	  .player (player),
 	  // input
 	  .term (term),
 	  .left (left),
@@ -95,8 +93,6 @@ module driver(
 	  .middle (middle),
 	  .clk (game_clk),
 	  .sw (sw),
-	  .ai (opt),
-	  .move (move),
 	  .rst  (rst)
 	);
 
@@ -124,10 +120,6 @@ module driver(
 	  .grid (grid),
 	  .location (location)
 	);
-	
-	minimax minimax_(
-	.opt (opt), .move (move),
-	.grid (grid), .column_counts (column_counts), .player (player), .sw (sw), .clk (game_clk)
-	);
+
 	
 endmodule

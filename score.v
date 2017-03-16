@@ -34,7 +34,7 @@ input clk;
 wire [8:0] score;
 reg [8:0] score_r;
 assign score = score_r;
-wire [97:0] grid;
+wire [83:0] grid;
 wire [6:0] ai;
 wire [6:0] opponent;
 wire clk;

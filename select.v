@@ -22,8 +22,6 @@ module select(
 	  // output
 	  grid,
 	  location,
-	  column_counts,
-	  player,
 	  // input
 	  term,
 	  left,
@@ -31,8 +29,6 @@ module select(
 	  middle,
 	  clk,
 	  sw,
-	  move,
-	  ai,
 	  rst
 	);
 wire clk;
@@ -46,8 +42,6 @@ reg [6:0] location_r;
 assign location = location_r;
 wire term;
 wire sw;
-wire move;
-wire [6:0] ai;
 
 reg gone_left;
 reg gone_right;
@@ -61,13 +55,11 @@ input right;
 input middle;
 input term;
 input sw;
-input move;
-input ai;
+wire move;
+wire [6:0] ai;
 
 output location;
 output grid;
-output player;
-output column_counts;
 
 reg [97:0] grid_r = 0;
 assign grid = grid_r;
@@ -77,6 +69,12 @@ assign player = player_r;
 
 reg [2:0] selected;
 reg [20:0] column_counts;
+
+	
+minimax minimax_(
+	.opt (ai), .move (move),
+	.grid (grid[83:0]), .column_counts (column_counts), .player (player), .sw (sw), .clk (clk)
+);
 
 initial
 begin
@@ -133,12 +131,26 @@ begin
 	 end
 	 gone_right = 1;
   end
-  // drop
-  else if (middle && !term  && !(sw && player))
+  // ai drop
+  else if (sw && player_r && move && !term)
+  begin
+    if(~aidropped)
+	 begin
+      grid_r[ai-:2] = 2'b10;
+	   player_r = 0;
+	   column_counts[(6 - ((ai - 1) % 14)/2)*3 + 2-:3] = (column_counts[(6 - ((ai - 1) % 14)/2)*3 + 2-:3] + 1)%8;
+      selected = 0;
+	   grid_r[95:84] = 0;
+	   grid_r[97:96] = 2'b01;
+	 end
+	 aidropped = 1;
+  end
+  // drop against ai
+  else if (sw && middle && !term)
   begin
     gone_left = 0;
 	 gone_right = 0;
-	 if(~dropped)
+	 if(~dropped && ~player_r)
 	 begin
 	   if(column_counts[selected*3 + 2-:3] < 6)
 		begin
@@ -154,18 +166,25 @@ begin
 	 end
 	 dropped = 1;
   end
-  else if (sw && player && move && !term)
+  // drop against player
+  else if (~sw && middle && !term)
   begin
-    if(~aidropped)
+    gone_left = 0;
+	 gone_right = 0;
+	 if(~dropped)
 	 begin
-      grid_r[ai-:2] = 2'b10;
-	   player_r = 0;
-	   column_counts[(6 - (ai + 1) % 14)*3-:3] = (column_counts[(6 - (ai + 1) % 14)*3-:3] + 1)%8;
-      selected = 0;
-	   grid_r[95:84] = 0;
-	   grid_r[97:96] = 2'b01;
+	   if(column_counts[selected*3 + 2-:3] < 6)
+		begin
+		  location_r = (13 - selected*2 + column_counts[selected*3 + 2-:3] * 14) % 128;
+		  grid_r[13 - selected*2 + column_counts[selected*3 + 2-:3] * 14-:2] = player_r + 1;
+		  column_counts[selected*3 + 2-:3] = (column_counts[selected*3 + 2-:3] + 1)%8;
+		  player_r = ~player_r;
+		  grid_r[(97-selected*2)-:2] = 0;
+		  grid_r[97:96] = player_r + 1;
+	     selected = 0;
+		end
 	 end
-	 aidropped = 1;
+	 dropped = 1;
   end
   else
   begin

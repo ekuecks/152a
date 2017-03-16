@@ -43,6 +43,12 @@ module clock_divider(
   assign debounce_counter_inc = debounce_counter + 1;
   assign debounce_clk = debounce_counter_inc[17];
   
+  initial
+  begin
+    debounce_counter = 0;
+	 display_counter = 0;
+  end
+  
   always @(posedge clk)
   begin
     display_counter = (display_counter + 1) % 4;
