@@ -136,6 +136,7 @@ begin
   begin
     if(~aidropped)
 	 begin
+	   location_r = ai;
       grid_r[ai-:2] = 2'b10;
 	   player_r = 0;
 	   column_counts[(6 - ((ai - 1) % 14)/2)*3 + 2-:3] = (column_counts[(6 - ((ai - 1) % 14)/2)*3 + 2-:3] + 1)%8;

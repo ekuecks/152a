@@ -47,6 +47,7 @@ reg [2:0] index;
 wire move;
 reg move_r;
 assign move = move_r;
+reg initial_score;
 
 reg [6:0] count; // 105 cycles
 wire [6:0] opt;
@@ -83,10 +84,11 @@ begin
     move_r = 0;
     optscore = 0;
     opt_r = 1;
+	 curscore = 0;
   end
   else if (count == 105)
   begin
-    if(curscore >= optscore)
+    if(curscore >= optscore && aimoved)
     begin
       // Same check as below
       // For the last move
@@ -105,7 +107,6 @@ begin
     if(count == 0)
     begin
       optscore = 0;
-      opt_r = 1;
     end
     else if(curscore >= optscore)
     begin
@@ -116,7 +117,7 @@ begin
       opt_r = ai;
       optscore = curscore;
     end
-    curscore = 0;
+	 initial_score = 1;
     // make next ai move
     if(column_counts[(count / 15)*3 + 2-:3] < 6)
     begin
@@ -141,9 +142,9 @@ begin
     if(column_counts[(((count % 15) - 1)/2)* 3 +2-:3] < 6)
     begin
       grid_copy_2 = grid_copy;
-      grid_copy_2[13 - (count % 15)*2 + column_counts[(((count % 15) - 1)/2)* 3 +2-:3] * 14-:2] = 2'b01;
+      grid_copy_2[14 - (count % 15) + column_counts[(((count % 15) - 1)/2)* 3 +2-:3] * 14-:2] = 2'b01;
       opponentmoved = 1;
-      opponent = (12 - (count % 15)*2 + column_counts[(((count % 15) - 1)/2)* 3 +2-:3] * 14)% 128;
+      opponent = (13 - (count % 15) + column_counts[(((count % 15) - 1)/2)* 3 +2-:3] * 14)% 128;
     end
     else
     begin
@@ -156,11 +157,12 @@ begin
   else
   begin
     // get the score after each opponent move
-    if (score <= curscore && aimoved && opponentmoved)
+    if ((score <= curscore || initial_score) && aimoved && opponentmoved)
     begin
       // curscore is the score for the current ai move
       // if this score is lower thn the current score we have, update (minimize this score)
       curscore = score;
+		initial_score = 0;
     end
     count = (count + 1) % 128;
   end
