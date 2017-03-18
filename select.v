@@ -112,6 +112,7 @@ begin
 	grid_r[prev2_loc-:2] = 0;
 	column_counts[prev2_selected*3 + 2-:3] = (column_counts[prev2_selected*3 + 2-:3] - 1)%8;
 	column_counts[prev_selected*3 + 2-:3] = (column_counts[prev_selected*3 + 2-:3] - 1)%8;
+	regret = 0;
   end
   else if (grid_r[97:84] == 0)
   begin
