@@ -19,12 +19,13 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module debounce(
-    left, right, middle, rst,
-	 btnL, btnR, btnM, btnT, debounce_clk
+    left, right, middle, rst, down,
+	 btnL, btnR, btnM, btnT, btnD, debounce_clk
     );
    output left;
 	output right;
 	output middle;
+	output down;
 	output rst;
 	
 	//input clk;
@@ -32,6 +33,7 @@ module debounce(
 	input btnL;
 	input btnR;
 	input btnM;
+	input btnD;
 	input btnT;
 	
 	//wire clk;
@@ -39,6 +41,7 @@ module debounce(
 	wire btnL;
 	wire btnR;
 	wire btnM;
+	wire btnD;
 	wire btnT;
 	
    reg [1:0]   arst_ff;
@@ -108,6 +111,23 @@ module debounce(
      else
 	  begin
 	    amiddle_ff <= {1'b0, amiddle_ff[10:1]};
+	  end
+   end
+	
+	reg [10:0]   adown_ff;
+   wire        down;
+   wire        adown_i;
+
+   assign adown_i = btnD;
+   assign down = adown_ff[0];
+	
+	always @ (posedge debounce_clk) // or posedge amiddle_i)
+   begin
+	  if (adown_i)
+       adown_ff <= 11'b11111111111;
+     else
+	  begin
+	    adown_ff <= {1'b0, adown_ff[10:1]};
 	  end
    end
 endmodule

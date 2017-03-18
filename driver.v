@@ -22,7 +22,7 @@ module driver(
     // output
     vgaRed, vgaGreen, vgaBlue, Hsync, Vsync,
 	 // input
-	 clk, btnR, btnL, btnM, btnT, sw
+	 clk, btnR, btnL, btnM, btnT, btnD, sw
     );
 	output vgaRed;
 	output vgaGreen;
@@ -35,6 +35,7 @@ module driver(
 	input btnL;
 	input btnM;
 	input btnT;
+	input btnD;
 	input sw;
 	
    wire [2:0] vgaRed;
@@ -49,6 +50,7 @@ module driver(
 	wire btnL;
 	wire btnM;
 	wire btnT;
+	wire btnD;
 	
 	wire [97:0] grid;
 	wire [6:0] location;
@@ -73,13 +75,15 @@ module driver(
 	  .left (left),
 	  .right (right),
 	  .middle (middle),
+	  .down (down),
 	  .rst (rst),
 	  //.clk (clk),
 	  .debounce_clk (debounce_clk),
 	  .btnL (btnL),
 	  .btnR (btnR),
 	  .btnM (btnM),
-	  .btnT (btnT)
+	  .btnT (btnT),
+	  .btnD (btnD)
 	);
 	
 	select select_(
@@ -91,6 +95,7 @@ module driver(
 	  .left (left),
 	  .right (right),
 	  .middle (middle),
+	  .down (down),
 	  .clk (game_clk),
 	  .sw (sw),
 	  .rst  (rst)

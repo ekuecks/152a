@@ -27,6 +27,7 @@ module select(
 	  left,
 	  right,
 	  middle,
+	  down,
 	  clk,
 	  sw,
 	  rst
@@ -47,12 +48,17 @@ reg gone_left;
 reg gone_right;
 reg dropped;
 reg aidropped;
+reg [6:0] prev_loc;
+reg [6:0] prev2_loc;
+reg regret;
+
 
 input clk;
 input rst;
 input left;
 input right;
 input middle;
+input down;
 input term;
 input sw;
 wire move;
@@ -69,6 +75,8 @@ assign player = player_r;
 
 reg [2:0] selected;
 reg [20:0] column_counts;
+reg [2:0] prev_selected;
+reg [2:0] prev2_selected;
 
 	
 minimax minimax_(
@@ -84,6 +92,7 @@ begin
   selected = 0;
   column_counts = 0;
   location_r = 1;
+  regret = 0;
 end
 
 always @ (posedge clk)
@@ -96,6 +105,13 @@ begin
 	 selected = 0;
 	 column_counts = 0;
 	 location_r = 1;
+  end
+  else if (down)
+  begin
+	grid_r[prev_loc-:2] = 0;
+	grid_r[prev2_loc-:2] = 0;
+	column_counts[prev2_selected*3 + 2-:3] = (column_counts[prev2_selected*3 + 2-:3] - 1)%8;
+	column_counts[prev_selected*3 + 2-:3] = (column_counts[prev_selected*3 + 2-:3] - 1)%8;
   end
   else if (grid_r[97:84] == 0)
   begin
@@ -136,6 +152,11 @@ begin
   begin
     if(~aidropped)
 	 begin
+	   if (regret)
+		begin
+		  prev2_selected = selected;
+		  prev2_loc = ai;
+		end
 	   location_r = ai;
       grid_r[ai-:2] = 2'b10;
 	   player_r = 0;
@@ -156,7 +177,9 @@ begin
 	   if(column_counts[selected*3 + 2-:3] < 6)
 		begin
 		  location_r = (13 - selected*2 + column_counts[selected*3 + 2-:3] * 14) % 128;
+		  prev_loc = (13 - selected*2 + column_counts[selected*3 + 2-:3] * 14) % 128;
 		  grid_r[13 - selected*2 + column_counts[selected*3 + 2-:3] * 14-:2] = player_r + 1;
+		  prev_selected = selected;
 		  column_counts[selected*3 + 2-:3] = (column_counts[selected*3 + 2-:3] + 1)%8;
 		  player_r = ~player_r;
 		  grid_r[(97-selected*2)-:2] = 0;
@@ -177,7 +200,9 @@ begin
 	   if(column_counts[selected*3 + 2-:3] < 6)
 		begin
 		  location_r = (13 - selected*2 + column_counts[selected*3 + 2-:3] * 14) % 128;
+		  prev_loc = (13 - selected*2 + column_counts[selected*3 + 2-:3] * 14) % 128;
 		  grid_r[13 - selected*2 + column_counts[selected*3 + 2-:3] * 14-:2] = player_r + 1;
+		  prev_selected = selected;
 		  column_counts[selected*3 + 2-:3] = (column_counts[selected*3 + 2-:3] + 1)%8;
 		  player_r = ~player_r;
 		  grid_r[(97-selected*2)-:2] = 0;
