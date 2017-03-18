@@ -108,7 +108,7 @@ begin
     begin
       optscore = 0;
     end
-    else if(curscore >= optscore)
+    else if(curscore >= optscore && aimoved)
     begin
       // if this is not the first time through, then curscore is the min score for the previous move
       // if curscore is larger than the optimal score so far, update the optimal move to be the previous one
@@ -133,18 +133,19 @@ begin
       grid_copy = grid;
       aimoved = 0;
       ai = 1;
+		column_counts_copy = column_counts;
     end
     count = (count + 1) % 128;
   end
   else if ((count % 15) % 2 == 1)
   begin
     // make next opponent move every other frame
-    if(column_counts[(((count % 15) - 1)/2)* 3 +2-:3] < 6)
+    if(column_counts_copy[(((count / 15) - 1)/2)* 3 +2-:3] < 6)
     begin
       grid_copy_2 = grid_copy;
-      grid_copy_2[14 - (count % 15) + column_counts[(((count % 15) - 1)/2)* 3 +2-:3] * 14-:2] = 2'b01;
+      grid_copy_2[14 - (count / 15) + column_counts_copy[(((count / 15) - 1)/2)* 3 +2-:3] * 14-:2] = 2'b01;
       opponentmoved = 1;
-      opponent = (13 - (count % 15) + column_counts[(((count % 15) - 1)/2)* 3 +2-:3] * 14)% 128;
+      opponent = (13 - (count / 15) + column_counts_copy[(((count / 15) - 1)/2)* 3 +2-:3] * 14)% 128;
     end
     else
     begin

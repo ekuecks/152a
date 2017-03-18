@@ -91,7 +91,7 @@ always @ (posedge clk)
     // aivertical
     if(ai > 41)
 	 begin
-	   aivert = grid[ai - 1] & grid[ai - 15] & grid[ai - 29] & grid[ai - 43];
+	   aivert = grid[ai + 1  - 1] & grid[ai + 1  - 15] & grid[ai + 1  - 29] & grid[ai + 1  - 43];
 	 end
 	 else
 	 begin
@@ -101,46 +101,46 @@ always @ (posedge clk)
 	 // horizontal
 	 if(ai == 83 || ai == 69 || ai == 55 || ai == 41 || ai == 27 || ai == 13)
 	 begin
-	   aihoriz_r[0] = grid[ai - 1] & grid[ai - 3] & grid[ai - 5] & grid[ai - 7];
+	   aihoriz_r[0] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  - 5] & grid[ai + 1  - 7];
 	   aihoriz_r[3:1] = 0;
 	 end
 	 else if(ai == 81 || ai == 67 || ai == 53 || ai == 39 || ai == 25 || ai == 11)
 	 begin
-		aihoriz_r[0] = grid[ai - 1] & grid[ai - 3] & grid[ai - 5] & grid[ai - 7];
-	   aihoriz_r[1] = grid[ai - 1] & grid[ai - 3] & grid[ai - 5] & grid[ai + 1];
+		aihoriz_r[0] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  - 5] & grid[ai + 1  - 7];
+	   aihoriz_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  - 5] & grid[ai + 1  + 1];
       aihoriz_r[3:2] = 0;
     end
 	 else if(ai == 79 || ai == 65 || ai == 51 || ai == 37 || ai == 23 || ai == 9)
 	 begin
-		aihoriz_r[0] = grid[ai - 1] & grid[ai - 3] & grid[ai - 5] & grid[ai - 7];
-	   aihoriz_r[1] = grid[ai - 1] & grid[ai - 3] & grid[ai - 5] & grid[ai + 1];
-      aihoriz_r[2] = grid[ai - 1] & grid[ai - 3] & grid[ai + 3] & grid[ai + 1];
+		aihoriz_r[0] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  - 5] & grid[ai + 1  - 7];
+	   aihoriz_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  - 5] & grid[ai + 1  + 1];
+      aihoriz_r[2] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  + 3] & grid[ai + 1  + 1];
 		aihoriz_r[3] = 0;
     end
 	 else if(ai == 77 || ai == 63 || ai == 49 || ai == 35 || ai == 21 || ai == 7)
 	 begin
-		aihoriz_r[0] = grid[ai - 1] & grid[ai - 3] & grid[ai - 5] & grid[ai - 7];
-	   aihoriz_r[1] = grid[ai - 1] & grid[ai - 3] & grid[ai - 5] & grid[ai + 1];
-      aihoriz_r[2] = grid[ai - 1] & grid[ai - 3] & grid[ai + 3] & grid[ai + 1];
-		aihoriz_r[3] = grid[ai - 1] & grid[ai + 5] & grid[ai + 3] & grid[ai + 1];
+		aihoriz_r[0] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  - 5] & grid[ai + 1  - 7];
+	   aihoriz_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  - 5] & grid[ai + 1  + 1];
+      aihoriz_r[2] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  + 3] & grid[ai + 1  + 1];
+		aihoriz_r[3] = grid[ai + 1  - 1] & grid[ai + 1  + 5] & grid[ai + 1  + 3] & grid[ai + 1  + 1];
     end
 	 else if(ai == 75 || ai == 61 || ai == 47 || ai == 33 || ai == 19 || ai == 5)
     begin
 		aihoriz_r[0] = 0;
-	   aihoriz_r[1] = grid[ai - 1] & grid[ai - 3] & grid[ai - 5] & grid[ai + 1];
-      aihoriz_r[2] = grid[ai - 1] & grid[ai - 3] & grid[ai + 3] & grid[ai + 1];
-		aihoriz_r[3] = grid[ai - 1] & grid[ai + 5] & grid[ai + 3] & grid[ai + 1];
+	   aihoriz_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  - 5] & grid[ai + 1  + 1];
+      aihoriz_r[2] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  + 3] & grid[ai + 1  + 1];
+		aihoriz_r[3] = grid[ai + 1  - 1] & grid[ai + 1  + 5] & grid[ai + 1  + 3] & grid[ai + 1  + 1];
     end
 	 else if(ai == 73 || ai == 59 || ai == 45 || ai == 31 || ai == 17 || ai == 3)
 	 begin
 		aihoriz_r[1:0] = 0;     
-	   aihoriz_r[2] = grid[ai - 1] & grid[ai - 3] & grid[ai + 3] & grid[ai + 1];
-		aihoriz_r[3] = grid[ai - 1] & grid[ai + 5] & grid[ai + 3] & grid[ai + 1];
+	   aihoriz_r[2] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  + 3] & grid[ai + 1  + 1];
+		aihoriz_r[3] = grid[ai + 1  - 1] & grid[ai + 1  + 5] & grid[ai + 1  + 3] & grid[ai + 1  + 1];
     end
 	 else if(ai == 71 || ai == 57 || ai == 43 || ai == 29 || ai == 15 || ai == 1)
 	 begin  
 		aihoriz_r[2:0] = 0;
-		aihoriz_r[3] = grid[ai - 1] & grid[ai + 5] & grid[ai + 3] & grid[ai + 1];
+		aihoriz_r[3] = grid[ai + 1  - 1] & grid[ai + 1  + 5] & grid[ai + 1  + 3] & grid[ai + 1  + 1];
     end
 	 else
 	 begin
@@ -151,22 +151,22 @@ always @ (posedge clk)
 	 // last
 	 if(ai == 77 || ai == 75|| ai == 73 || ai == 71 || ai == 57 || ai == 43)
 	 begin
-	   aidiagup_r[0] = grid[ai - 1] & grid[ai - 13] & grid[ai - 25] & grid[ai - 37];
+	   aidiagup_r[0] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  - 25] & grid[ai + 1  - 37];
 	   aidiagup_r[3:1] = 0;
 	 end
 	 // last or third
 	 else if(ai == 63 || ai == 61 || ai == 59 || ai == 45)
 	 begin
-	   aidiagup_r[0] = grid[ai - 1] & grid[ai - 13] & grid[ai - 25] & grid[ai - 37];
-	   aidiagup_r[1] = grid[ai - 1] & grid[ai - 13] & grid[ai - 25] & grid[ai + 11];
+	   aidiagup_r[0] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  - 25] & grid[ai + 1  - 37];
+	   aidiagup_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  - 25] & grid[ai + 1  + 11];
       aidiagup_r[3:2] = 0;
     end
 	 // last or third or second
 	 else if(ai == 49 || ai == 47)
 	 begin
-	   aidiagup_r[0] = grid[ai - 1] & grid[ai - 13] & grid[ai - 25] & grid[ai - 37];
-	   aidiagup_r[1] = grid[ai - 1] & grid[ai - 13] & grid[ai - 25] & grid[ai + 11];
-      aidiagup_r[2] = grid[ai - 1] & grid[ai - 13] & grid[ai + 23] & grid[ai + 11];
+	   aidiagup_r[0] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  - 25] & grid[ai + 1  - 37];
+	   aidiagup_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  - 25] & grid[ai + 1  + 11];
+      aidiagup_r[2] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  + 23] & grid[ai + 1  + 11];
       aidiagup_r[3] = 0;
 	 end
 	 // first
@@ -175,30 +175,30 @@ always @ (posedge clk)
 		aidiagup_r[0] = 0;
 	   aidiagup_r[1] = 0;
       aidiagup_r[2] = 0;
-      aidiagup_r[3] = grid[ai - 1] & grid[ai + 35] & grid[ai + 23] & grid[ai + 11];
+      aidiagup_r[3] = grid[ai + 1  - 1] & grid[ai + 1  + 35] & grid[ai + 1  + 23] & grid[ai + 1  + 11];
 	 end
 	 // first or second
 	 else if(ai == 25 || ai == 23 || ai == 21 || ai == 39)
 	 begin
 	   aidiagup_r[0] = 0;
 	   aidiagup_r[1] = 0;
-      aidiagup_r[2] = grid[ai - 1] & grid[ai - 13] & grid[ai + 23] & grid[ai + 11];
-      aidiagup_r[3] = grid[ai - 1] & grid[ai + 35] & grid[ai + 23] & grid[ai + 11];
+      aidiagup_r[2] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  + 23] & grid[ai + 1  + 11];
+      aidiagup_r[3] = grid[ai + 1  - 1] & grid[ai + 1  + 35] & grid[ai + 1  + 23] & grid[ai + 1  + 11];
 	 end
 	 // first or second or third
 	 else if(ai == 37 || ai == 35)
 	 begin
 	   aidiagup_r[0] = 0;
-	   aidiagup_r[1] = grid[ai - 1] & grid[ai - 13] & grid[ai - 25] & grid[ai + 11];
-      aidiagup_r[2] = grid[ai - 1] & grid[ai - 13] & grid[ai + 23] & grid[ai + 11];
-      aidiagup_r[3] = grid[ai - 1] & grid[ai + 35] & grid[ai + 23] & grid[ai + 11];
+	   aidiagup_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  - 25] & grid[ai + 1  + 11];
+      aidiagup_r[2] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  + 23] & grid[ai + 1  + 11];
+      aidiagup_r[3] = grid[ai + 1  - 1] & grid[ai + 1  + 35] & grid[ai + 1  + 23] & grid[ai + 1  + 11];
 	 end
 	 // second or third
 	 else if(ai == 51 || ai == 33)
 	 begin
 	   aidiagup_r[0] = 0;
-	   aidiagup_r[1] = grid[ai - 1] & grid[ai - 13] & grid[ai - 25] & grid[ai + 11];
-      aidiagup_r[2] = grid[ai - 1] & grid[ai - 13] & grid[ai + 23] & grid[ai + 11];
+	   aidiagup_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  - 25] & grid[ai + 1  + 11];
+      aidiagup_r[2] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  + 23] & grid[ai + 1  + 11];
       aidiagup_r[3] = 0;
 	 end
 	 // second
@@ -206,14 +206,14 @@ always @ (posedge clk)
 	 begin
 	   aidiagup_r[0] = 0;
 	   aidiagup_r[1] = 0;
-      aidiagup_r[2] = grid[ai - 1] & grid[ai - 13] & grid[ai + 23] & grid[ai + 11];
+      aidiagup_r[2] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  + 23] & grid[ai + 1  + 11];
       aidiagup_r[3] = 0;
 	 end
 	 // third
 	 else if(ai == 65 || ai == 31)
 	 begin
 	   aidiagup_r[0] = 0;
-	   aidiagup_r[1] = grid[ai - 1] & grid[ai - 13] & grid[ai - 25] & grid[ai + 11];
+	   aidiagup_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  - 25] & grid[ai + 1  + 11];
       aidiagup_r[2] = 0;
       aidiagup_r[3] = 0;    
 	 end
@@ -226,22 +226,22 @@ always @ (posedge clk)
 	 // last
 	 if(ai == 7 || ai == 5 || ai == 3 || ai == 1 || ai == 15 || ai == 29)
 	 begin
-	   aidiagdown_r[0] = grid[ai - 1] & grid[ai + 15] & grid[ai + 31] & grid[ai + 47];
+	   aidiagdown_r[0] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  + 31] & grid[ai + 1  + 47];
 	   aidiagdown_r[3:1] = 0;
 	 end
 	 // last or third
 	 else if(ai == 21 || ai == 19 || ai == 17 || ai == 31)
 	 begin
-      aidiagdown_r[0] = grid[ai - 1] & grid[ai + 15] & grid[ai + 31] & grid[ai + 47];
-	   aidiagdown_r[1] = grid[ai - 1] & grid[ai + 15] & grid[ai + 31] & grid[ai - 17];
+      aidiagdown_r[0] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  + 31] & grid[ai + 1  + 47];
+	   aidiagdown_r[1] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  + 31] & grid[ai + 1  - 17];
       aidiagdown_r[3:2] = 0;
     end
 	 // last or third or second
 	 else if(ai == 35 || ai == 33)
 	 begin
-	   aidiagdown_r[0] = grid[ai - 1] & grid[ai + 15] & grid[ai + 31] & grid[ai + 47];
-	   aidiagdown_r[1] = grid[ai - 1] & grid[ai + 15] & grid[ai + 31] & grid[ai - 17];
-      aidiagdown_r[2] = grid[ai - 1] & grid[ai + 15] & grid[ai - 33] & grid[ai - 17];
+	   aidiagdown_r[0] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  + 31] & grid[ai + 1  + 47];
+	   aidiagdown_r[1] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  + 31] & grid[ai + 1  - 17];
+      aidiagdown_r[2] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  - 33] & grid[ai + 1  - 17];
 	   aidiagdown_r[3] = 0;
 	 end
 	 // first
@@ -250,30 +250,30 @@ always @ (posedge clk)
 		aidiagdown_r[0] = 0;
 	   aidiagdown_r[1] = 0;
       aidiagdown_r[2] = 0;
-      aidiagdown_r[3] = grid[ai - 1] & grid[ai - 49] & grid[ai - 33] & grid[ai - 17];
+      aidiagdown_r[3] = grid[ai + 1  - 1] & grid[ai + 1  - 49] & grid[ai + 1  - 33] & grid[ai + 1  - 17];
     end
 	 // first or second
 	 else if(ai == 67 || ai == 65 || ai == 63 || ai == 53)
 	 begin
 	   aidiagdown_r[0] = 0;
 	   aidiagdown_r[1] = 0;
-      aidiagdown_r[2] = grid[ai - 1] & grid[ai + 15] & grid[ai - 33] & grid[ai - 17];
-	   aidiagdown_r[3] = grid[ai - 1] & grid[ai - 49] & grid[ai - 33] & grid[ai - 17];
+      aidiagdown_r[2] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  - 33] & grid[ai + 1  - 17];
+	   aidiagdown_r[3] = grid[ai + 1  - 1] & grid[ai + 1  - 49] & grid[ai + 1  - 33] & grid[ai + 1  - 17];
 	 end
 	 // first or second or third
 	 else if(ai == 51 || ai == 49)
 	 begin
 	   aidiagdown_r[0] = 0;
-      aidiagdown_r[1] = grid[ai - 1] & grid[ai + 15] & grid[ai + 31] & grid[ai - 17];
-      aidiagdown_r[2] = grid[ai - 1] & grid[ai + 15] & grid[ai - 33] & grid[ai - 17];
-      aidiagdown_r[3] = grid[ai - 1] & grid[ai - 49] & grid[ai - 33] & grid[ai - 17];
+      aidiagdown_r[1] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  + 31] & grid[ai + 1  - 17];
+      aidiagdown_r[2] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  - 33] & grid[ai + 1  - 17];
+      aidiagdown_r[3] = grid[ai + 1  - 1] & grid[ai + 1  - 49] & grid[ai + 1  - 33] & grid[ai + 1  - 17];
 	 end
 	 // second or third
 	 else if(ai == 37 || ai == 47)
 	 begin
 	   aidiagdown_r[0] = 0;
-      aidiagdown_r[1] = grid[ai - 1] & grid[ai + 15] & grid[ai + 31] & grid[ai - 17];
-      aidiagdown_r[2] = grid[ai - 1] & grid[ai + 15] & grid[ai - 33] & grid[ai - 17];
+      aidiagdown_r[1] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  + 31] & grid[ai + 1  - 17];
+      aidiagdown_r[2] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  - 33] & grid[ai + 1  - 17];
       aidiagdown_r[3] = 0;
 	 end
 	 // second
@@ -281,14 +281,14 @@ always @ (posedge clk)
 	 begin
 	   aidiagdown_r[0] = 0;
 	   aidiagdown_r[1] = 0;
-      aidiagdown_r[2] = grid[ai - 1] & grid[ai + 15] & grid[ai - 33] & grid[ai - 17];
+      aidiagdown_r[2] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  - 33] & grid[ai + 1  - 17];
       aidiagdown_r[3] = 0;
 	 end
 	 // third
 	 else if(ai == 23 || ai == 45)
 	 begin
 	   aidiagdown_r[0] = 0;
-      aidiagdown_r[1] = grid[ai - 1] & grid[ai + 15] & grid[ai + 31] & grid[ai - 17];
+      aidiagdown_r[1] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  + 31] & grid[ai + 1  - 17];
       aidiagdown_r[2] = 0;
       aidiagdown_r[3] = 0;    
 	 end
@@ -300,7 +300,7 @@ always @ (posedge clk)
     // aivert3ical
     if(ai > 27)
 	 begin
-	   aivert3 = grid[ai - 1] & grid[ai - 15] & grid[ai - 29];
+	   aivert3 = grid[ai + 1  - 1] & grid[ai + 1  - 15] & grid[ai + 1  - 29];
 	 end
 	 else
 	 begin
@@ -310,31 +310,31 @@ always @ (posedge clk)
 	 // horiz3ontal
 	 if(ai == 83 || ai == 69 || ai == 55 || ai == 41 || ai == 27 || ai == 13)
 	 begin
-	   aihoriz3_r[0] = grid[ai - 1] & grid[ai - 3] & grid[ai - 5];
+	   aihoriz3_r[0] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  - 5];
 	   aihoriz3_r[2:1] = 0;
 	 end
 	 else if(ai == 81 || ai == 67 || ai == 53 || ai == 39 || ai == 25 || ai == 11)
 	 begin
-		aihoriz3_r[0] = grid[ai - 1] & grid[ai - 3] & grid[ai - 5];
-	   aihoriz3_r[1] = grid[ai - 1] & grid[ai - 3] & grid[ai + 1];
+		aihoriz3_r[0] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  - 5];
+	   aihoriz3_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  + 1];
       aihoriz3_r[2] = 0;
     end
 	 else if(ai == 79 || ai == 65 || ai == 51 || ai == 37 || ai == 23 || ai == 9 || ai == 77 || ai == 63 || ai == 49 || ai == 35 || ai == 21 || ai == 7 || ai == 75 || ai == 61 || ai == 47 || ai == 33 || ai == 19 || ai == 5)
 	 begin
-		aihoriz3_r[0] = grid[ai - 1] & grid[ai - 3] & grid[ai - 5];
-	   aihoriz3_r[1] = grid[ai - 1] & grid[ai - 3] & grid[ai + 1];
-      aihoriz3_r[2] = grid[ai - 1] & grid[ai + 3] & grid[ai + 1];
+		aihoriz3_r[0] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  - 5];
+	   aihoriz3_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  + 1];
+      aihoriz3_r[2] = grid[ai + 1  - 1] & grid[ai + 1  + 3] & grid[ai + 1  + 1];
     end
 	 else if(ai == 73 || ai == 59 || ai == 45 || ai == 31 || ai == 17 || ai == 3)
 	 begin
 		aihoriz3_r[0] = 0;     
-	   aihoriz3_r[1] = grid[ai - 1] & grid[ai - 3] & grid[ai + 1];
-      aihoriz3_r[2] = grid[ai - 1] & grid[ai + 3] & grid[ai + 1];
+	   aihoriz3_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 3] & grid[ai + 1  + 1];
+      aihoriz3_r[2] = grid[ai + 1  - 1] & grid[ai + 1  + 3] & grid[ai + 1  + 1];
     end
 	 else if(ai == 71 || ai == 57 || ai == 43 || ai == 29 || ai == 15 || ai == 1)
 	 begin  
 		aihoriz3_r[1:0] = 0;
-		aihoriz3_r[2] = grid[ai - 1] & grid[ai + 3] & grid[ai + 1];
+		aihoriz3_r[2] = grid[ai + 1  - 1] & grid[ai + 1  + 3] & grid[ai + 1  + 1];
     end
 	 else
 	 begin
@@ -345,42 +345,42 @@ always @ (posedge clk)
 	 // last
 	 if(ai == 79 || ai == 77 || ai == 75|| ai == 73 || ai == 71 || ai == 57 || ai == 43 || ai == 29)
 	 begin
-	   aidiagup3_r[0] = grid[ai - 1] & grid[ai - 13] & grid[ai - 25];
+	   aidiagup3_r[0] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  - 25];
 	   aidiagup3_r[2:1] = 0;
 	 end
 	 // last or second
 	 else if(ai == 65 || ai == 63 || ai == 61 || ai == 59 || ai == 45 || ai == 31)
 	 begin
-	   aidiagup3_r[0] = grid[ai - 1] & grid[ai - 13] & grid[ai - 25];
-	   aidiagup3_r[1] = grid[ai - 1] & grid[ai - 13] & grid[ai + 11];
+	   aidiagup3_r[0] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  - 25];
+	   aidiagup3_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  + 11];
       aidiagup3_r[2] = 0;
     end
 	 // last or second or first
 	 else if(ai == 51 || ai == 49 || ai == 47 || ai == 37 || ai == 35 || ai == 33)
 	 begin
-	   aidiagup3_r[0] = grid[ai - 1] & grid[ai - 13] & grid[ai - 25];
-	   aidiagup3_r[1] = grid[ai - 1] & grid[ai - 13] & grid[ai + 11];
-      aidiagup3_r[2] = grid[ai - 1] & grid[ai + 23] & grid[ai + 11];
+	   aidiagup3_r[0] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  - 25];
+	   aidiagup3_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  + 11];
+      aidiagup3_r[2] = grid[ai + 1  - 1] & grid[ai + 1  + 23] & grid[ai + 1  + 11];
 	 end
 	 // first
 	 else if(ai == 13 || ai == 11 || ai == 9 || ai == 7 || ai == 5 || ai == 27 || ai == 41 || ai == 55)
 	 begin
 		aidiagup3_r[0] = 0;
 	   aidiagup3_r[1] = 0;
-      aidiagup3_r[2] = grid[ai - 1] & grid[ai + 23] & grid[ai + 11];
+      aidiagup3_r[2] = grid[ai + 1  - 1] & grid[ai + 1  + 23] & grid[ai + 1  + 11];
 	 end
 	 // first or second
 	 else if(ai == 25 || ai == 23 || ai == 21 || ai == 19 || ai == 39 ||ai == 53)
 	 begin
 	   aidiagup3_r[0] = 0;
-	   aidiagup3_r[1] = grid[ai - 1] & grid[ai - 13] & grid[ai + 11];
-      aidiagup3_r[2] = grid[ai - 1] & grid[ai + 23] & grid[ai + 11];
+	   aidiagup3_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  + 11];
+      aidiagup3_r[2] = grid[ai + 1  - 1] & grid[ai + 1  + 23] & grid[ai + 1  + 11];
 	 end
 	 // second
 	 else if(ai == 17 || ai == 67)
 	 begin
 	   aidiagup3_r[0] = 0;
-	   aidiagup3_r[1] = grid[ai - 1] & grid[ai - 13] & grid[ai + 11];
+	   aidiagup3_r[1] = grid[ai + 1  - 1] & grid[ai + 1  - 13] & grid[ai + 1  + 11];
       aidiagup3_r[2] = 0;
 	 end
 	 else
@@ -392,42 +392,42 @@ always @ (posedge clk)
 	 // last
 	 if(ai == 9 || ai == 7 || ai == 5|| ai == 3 || ai == 1 || ai == 15 || ai == 29 || ai == 43)
 	 begin
-	 	aidiagdown3_r[0] = grid[ai - 1] & grid[ai + 15] & grid[ai + 31];
+	 	aidiagdown3_r[0] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  + 31];
 	   aidiagdown3_r[2:1] = 0;
 	 end
 	 // last or second
 	 else if(ai == 23 || ai == 21 || ai == 19 || ai == 17 || ai == 31 || ai == 45)
 	 begin
-	 	aidiagdown3_r[0] = grid[ai - 1] & grid[ai + 15] & grid[ai + 31];
-	   aidiagdown3_r[1] = grid[ai - 1] & grid[ai + 15] & grid[ai - 17];
+	 	aidiagdown3_r[0] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  + 31];
+	   aidiagdown3_r[1] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  - 17];
       aidiagdown3_r[2] = 0;
     end
 	 // last or second or first
 	 else if(ai == 51 || ai == 49 || ai == 47 || ai == 37 || ai == 35 || ai == 33)
 	 begin
-	 	aidiagdown3_r[0] = grid[ai - 1] & grid[ai + 15] & grid[ai + 31];
-	   aidiagdown3_r[1] = grid[ai - 1] & grid[ai + 15] & grid[ai - 17];
-      aidiagdown3_r[2] = grid[ai - 1] & grid[ai - 33] & grid[ai - 17];
+	 	aidiagdown3_r[0] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  + 31];
+	   aidiagdown3_r[1] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  - 17];
+      aidiagdown3_r[2] = grid[ai + 1  - 1] & grid[ai + 1  - 33] & grid[ai + 1  - 17];
 	 end
 	 // first
 	 else if(ai == 83 || ai == 81 || ai == 79 || ai == 77 || ai == 75 || ai == 69 || ai == 55 || ai == 41)
 	 begin
 		aidiagdown3_r[0] = 0;
 	   aidiagdown3_r[1] = 0;
-      aidiagdown3_r[2] = grid[ai - 1] & grid[ai - 33] & grid[ai - 17];
+      aidiagdown3_r[2] = grid[ai + 1  - 1] & grid[ai + 1  - 33] & grid[ai + 1  - 17];
 	 end
 	 // first or second
 	 else if(ai == 67 || ai == 65 || ai == 63 || ai == 61 || ai == 53 ||ai == 39)
 	 begin
 	   aidiagdown3_r[0] = 0;
-	   aidiagdown3_r[1] = grid[ai - 1] & grid[ai + 15] & grid[ai - 17];
-      aidiagdown3_r[2] = grid[ai - 1] & grid[ai - 33] & grid[ai - 17];
+	   aidiagdown3_r[1] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  - 17];
+      aidiagdown3_r[2] = grid[ai + 1  - 1] & grid[ai + 1  - 33] & grid[ai + 1  - 17];
 	 end
 	 // second
 	 else if(ai == 59 || ai == 25)
 	 begin
 	   aidiagdown3_r[0] = 0;
-	   aidiagdown3_r[1] = grid[ai - 1] & grid[ai + 15] & grid[ai - 17];
+	   aidiagdown3_r[1] = grid[ai + 1  - 1] & grid[ai + 1  + 15] & grid[ai + 1  - 17];
       aidiagdown3_r[2] = 0;
 	 end
 	 else
