@@ -35,7 +35,7 @@ output opt;
 output move;
 
 wire [20:0] column_counts;
-reg [20:0] column_counts_copy;
+//reg [20:0] column_counts_copy;
 wire [83:0] grid;
 reg [83:0] grid_copy;
 reg [83:0] grid_copy_2;
@@ -50,12 +50,17 @@ assign move = move_r;
 reg initial_score;
 
 reg [6:0] count; // 105 cycles
+reg [2:0] column;
 wire [6:0] opt;
 reg [6:0] opt_r;
 assign opt = opt_r;
-reg [8:0] optscore;
+wire [8:0] optscore;
+reg [8:0] optscore_r;
+assign optscore = optscore_r;
 wire [8:0] score;
-reg [8:0] curscore;
+wire [8:0] curscore;
+reg [8:0] curscore_r;
+assign curscore = curscore_r;
 
 score score_(
     //outputs
@@ -71,9 +76,10 @@ begin
   opponent = 0;
   grid_copy_2 = 0;
   move_r = 0;
-  column_counts_copy = 0;
+  //column_counts_copy = 0;
   count = 0;
-  optscore = 0;
+  optscore_r = 0;
+  column = 0;
 end
 
 always @(posedge clk)
@@ -82,9 +88,9 @@ begin
   begin
     count = 0;
     move_r = 0;
-    optscore = 0;
+    optscore_r = 0;
     opt_r = 1;
-	 curscore = 0;
+	 curscore_r = 0;
   end
   else if (count == 105)
   begin
@@ -93,7 +99,7 @@ begin
       // Same check as below
       // For the last move
       opt_r = ai;
-      optscore = curscore;
+      optscore_r = curscore_r;
     end
     move_r = 1;
     count = (count + 1) % 128;
@@ -106,7 +112,7 @@ begin
   begin
     if(count == 0)
     begin
-      optscore = 0;
+      optscore_r = 0;
     end
     else if(curscore >= optscore && aimoved)
     begin
@@ -115,54 +121,71 @@ begin
       // which is still stored in ai
       // (maximize the minima)
       opt_r = ai;
-      optscore = curscore;
+      optscore_r = curscore_r;
     end
 	 initial_score = 1;
     // make next ai move
     if(column_counts[(count / 15)*3 + 2-:3] < 6)
     begin
+	   column = count / 15;
       grid_copy = grid;
       grid_copy[13 - (count / 15)*2 + column_counts[(count / 15)*3 + 2-:3] * 14-:2] = 2'b10;
       aimoved = 1;
       ai = (13 - (count / 15)*2 + column_counts[(count / 15)*3 + 2-:3] * 14) % 128;
-      column_counts_copy = column_counts;
-      column_counts_copy[(count / 15)*3 + 2-:3] = (column_counts_copy[(count / 15)*3 + 2-:3] + 1) % 8;
+      //column_counts_copy = column_counts;
+      //column_counts_copy[(count / 15)*3 + 2-:3] = (column_counts_copy[(count / 15)*3 + 2-:3] + 1) % 8;
     end
     else
     begin
       grid_copy = grid;
       aimoved = 0;
       ai = 1;
-		column_counts_copy = column_counts;
+		column = 0;
     end
     count = (count + 1) % 128;
   end
   else if ((count % 15) % 2 == 1)
   begin
-    // make next opponent move every other frame
-    if(column_counts_copy[(((count / 15) - 1)/2)* 3 +2-:3] < 6)
-    begin
-      grid_copy_2 = grid_copy;
-      grid_copy_2[14 - (count / 15) + column_counts_copy[(((count / 15) - 1)/2)* 3 +2-:3] * 14-:2] = 2'b01;
-      opponentmoved = 1;
-      opponent = (13 - (count / 15) + column_counts_copy[(((count / 15) - 1)/2)* 3 +2-:3] * 14)% 128;
-    end
-    else
-    begin
-      grid_copy_2 = grid_copy;
+    if(aimoved)
+	   begin
+      // make next opponent move every other frame
+      if(column_counts[(((count % 15) - 1)/2)* 3 +2-:3] < 6 && (((count % 15) - 1)/2) != column)
+      begin
+        grid_copy_2 = grid_copy;
+        grid_copy_2[14 - (count % 15) + column_counts[(((count % 15) - 1)/2)* 3 + 2-:3] * 14-:2] = 2'b01;
+        opponentmoved = 1;
+        opponent = (13 - (count % 15) + column_counts[(((count % 15) - 1)/2)* 3 + 2-:3] * 14)% 128;
+      end
+	   else if (column_counts[(((count % 15) - 1)/2)* 3 +2-:3] < 6 && (((count % 15) - 1)/2) == column)
+	   begin
+	     grid_copy_2 = grid_copy;
+        grid_copy_2[ai + 14-:2] = 2'b01;
+        opponentmoved = 1;
+        opponent = (ai + 13)% 128;
+	   end
+      else
+      begin
+        grid_copy_2 = grid_copy;
+        opponentmoved = 0;
+        opponent = 0;
+      end
+	 end
+	 else
+	 begin
+	   grid_copy_2 = grid_copy;
       opponentmoved = 0;
       opponent = 0;
-    end
+	 end
     count = (count + 1) % 128;
   end
   else
   begin
     // get the score after each opponent move
-    if ((score <= curscore || initial_score) && aimoved && opponentmoved)
+    if ((score < curscore || initial_score) && aimoved && opponentmoved)
     begin
       // curscore is the score for the current ai move
-      // if this score is lower thn the current score we have, update (minimize this score)
-      curscore = score;
+      // if this score is lower than the current score we have, update (minimize this score)
+      curscore_r = score;
 		initial_score = 0;
     end
     count = (count + 1) % 128;

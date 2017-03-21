@@ -790,9 +790,9 @@ always @ (posedge clk)
 	 
 	 if(aifour)
 	 begin
-	   score_r = 511;
+	   score_r = 9'b111111111;
 	 end
-	 else if (opponentfour)
+	 else if(opponentfour)
 	 begin
 	   score_r = 0;
 	 end
