@@ -127,7 +127,7 @@ begin
     // make next ai move
     if(column_counts[(count / 15)*3 + 2-:3] < 6)
     begin
-	   column = count / 15;
+	   column = (count / 15) % 8;
       grid_copy = grid;
       grid_copy[13 - (count / 15)*2 + column_counts[(count / 15)*3 + 2-:3] * 14-:2] = 2'b10;
       aimoved = 1;
@@ -156,7 +156,7 @@ begin
         opponentmoved = 1;
         opponent = (13 - (count % 15) + column_counts[(((count % 15) - 1)/2)* 3 + 2-:3] * 14)% 128;
       end
-	   else if (column_counts[(((count % 15) - 1)/2)* 3 +2-:3] < 6 && (((count % 15) - 1)/2) == column)
+	   else if (ai < 70 && (((count % 15) - 1)/2) == column)
 	   begin
 	     grid_copy_2 = grid_copy;
         grid_copy_2[ai + 14-:2] = 2'b01;
