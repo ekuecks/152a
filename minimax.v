@@ -35,7 +35,6 @@ output opt;
 output move;
 
 wire [20:0] column_counts;
-//reg [20:0] column_counts_copy;
 wire [83:0] grid;
 reg [83:0] grid_copy;
 reg [83:0] grid_copy_2;
@@ -49,7 +48,7 @@ reg move_r;
 assign move = move_r;
 reg initial_score;
 
-reg [7:0] count; // 154 cycles
+reg [7:0] count; // 203 cycles
 reg [2:0] column;
 wire [6:0] opt;
 reg [6:0] opt_r;
@@ -91,7 +90,7 @@ begin
     opt_r = 1;
 	 curscore_r = 0;
   end
-  else if (count == 154)
+  else if (count == 203)
   begin
     if(curscore >= optscore && aimoved)
     begin
@@ -103,11 +102,11 @@ begin
     move_r = 1;
     count = (count + 1) % 256;
   end
-  else if (count > 154)
+  else if (count > 203)
   begin
     move_r = 0;
   end
-  else if (count % 22 == 0)
+  else if (count % 29 == 0)
   begin
     if(count == 0)
     begin
@@ -122,15 +121,15 @@ begin
       opt_r = ai;
       optscore_r = curscore_r;
     end
-	  initial_score = 1;
+    initial_score = 1;
     // make next ai move
-    if(column_counts[(count / 22)*3 + 2-:3] < 6)
+    if(column_counts[(count / 29)*3 + 2-:3] < 6)
     begin
-	   column = (count / 22) % 8;
+	   column = (count / 29) % 8;
       grid_copy = grid;
-      grid_copy[13 - (count / 22)*2 + column_counts[(count / 22)*3 + 2-:3] * 14-:2] = 2'b10;
+      grid_copy[13 - (count / 29)*2 + column_counts[(count / 29)*3 + 2-:3] * 14-:2] = 2'b10;
       aimoved = 1;
-      ai = (13 - (count / 22)*2 + column_counts[(count / 22)*3 + 2-:3] * 14) % 128;
+      ai = (13 - (count / 29)*2 + column_counts[(count / 29)*3 + 2-:3] * 14) % 128;
     end
     else
     begin
@@ -141,21 +140,21 @@ begin
     end
     count = (count + 1) % 256;
   end
-  else if ((count % 22) % 3 == 1)
+  else if ((count % 29) % 4 == 1)
   begin
     if(aimoved)
 	   begin
       // make next opponent move every other frame
-      if(column_counts[(count % 22) + 1-:3] < 6 && ((count % 22) - 1)/3 != column)
+      if(column_counts[(((count % 29) - 1) / 4) * 3 + 2-:3] < 6 && ((count % 29) - 1)/4 != column)
       begin
         grid_copy_2 = grid_copy;
-        grid_copy_2[13 - ((count % 22) - 1)/3 + column_counts[(count % 22) + 1-:3] * 14-:2] = 2'b01;
+        grid_copy_2[13 - (((count % 29) - 1)/4)*2 + column_counts[(((count % 29) - 1)/4)*3 + 2-:3] * 14-:2] = 2'b01;
         opponentmoved = 1;
-        opponent = (12 - ((count % 22) - 1)/3 + column_counts[(count % 22) + 1-:3] * 14)% 128;
+        opponent = (12 - (((count % 22) - 1)/3)*2 + column_counts[(((count % 29) - 1)/4)*3 + 2-:3] * 14) % 128;
       end
 	   else if (ai < 70 && ((count % 22) - 1)/3 == column)
 	   begin
-	      grid_copy_2 = grid_copy;
+        grid_copy_2 = grid_copy;
         grid_copy_2[ai + 14-:2] = 2'b01;
         opponentmoved = 1;
         opponent = (ai + 13)% 128;
@@ -175,7 +174,7 @@ begin
 	 end
     count = (count + 1) % 256;
   end
-  else if (((count % 22) % 3) == 0)
+  else if (((count % 29) % 4) == 0)
   begin
     // get the score after each opponent move
     if ((score < curscore || initial_score) && aimoved && opponentmoved)
@@ -189,6 +188,7 @@ begin
   end
   else
   begin
+    count = (count + 1) % 256;
   end
 end
 endmodule
