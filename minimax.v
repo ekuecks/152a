@@ -150,9 +150,9 @@ begin
         grid_copy_2 = grid_copy;
         grid_copy_2[13 - (((count % 29) - 1)/4)*2 + column_counts[(((count % 29) - 1)/4)*3 + 2-:3] * 14-:2] = 2'b01;
         opponentmoved = 1;
-        opponent = (12 - (((count % 22) - 1)/3)*2 + column_counts[(((count % 29) - 1)/4)*3 + 2-:3] * 14) % 128;
+        opponent = (12 - (((count % 29) - 1)/4)*2 + column_counts[(((count % 29) - 1)/4)*3 + 2-:3] * 14) % 128;
       end
-	   else if (ai < 70 && ((count % 22) - 1)/3 == column)
+	   else if (ai < 70 && ((count % 29) - 1)/4 == column)
 	   begin
         grid_copy_2 = grid_copy;
         grid_copy_2[ai + 14-:2] = 2'b01;
